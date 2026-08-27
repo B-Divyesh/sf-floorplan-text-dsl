@@ -1,5 +1,18 @@
 # Floorplan Text v1 handoff
 
+## Independent verification status — FAIL
+
+Candidate `d42e9041a300bb8cc8686696975205106d1583fe` and
+<https://floorplan-text-dsl.sociobot.in/> were independently verified on
+2026-08-27. The build, unit tests, normal/malformed/recovery authoring flow,
+true-scale SVG/PDF/PNG exports, mobile tabs, offline live reload, deployed
+artifact parity, privacy/network behavior, headers, bundle budgets, and axe
+audits passed. It is **not release-ready**: the primary textarea traps both
+Tab and Shift+Tab, preventing keyboard-only navigation to the rest of the
+application. Live hashed JS/CSS also use only `max-age=30` rather than
+long-lived immutable caching. See `.factory/verification-2.md` for exact
+commands, evidence, severity, and retest requirements.
+
 ## What shipped
 
 - A local-first split-pane drafting application built with Vite and strict
