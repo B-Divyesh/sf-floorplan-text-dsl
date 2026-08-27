@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://floorplan-text-dsl.sociobot.in/sitemap.xml
