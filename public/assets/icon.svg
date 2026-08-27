@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Floorplan Text">
+  <rect width="64" height="64" rx="8" fill="#f4efdf"/>
+  <path d="M9 53V11h24v15h22v27H37V38H23v15z" fill="none" stroke="#172b35" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M19 11v15m25 0v12" fill="none" stroke="#a5352d" stroke-width="3"/>
+</svg>

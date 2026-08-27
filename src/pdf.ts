@@ -43,8 +43,18 @@ export function makePdf(plan: Plan): Uint8Array {
 function pdfDoor(out: string[], item: Extract<Plan['items'][number], {kind:'door'}>, wall: Wall, layout: ReturnType<typeof makeLayout>): void {
   const opening = wallOpening(wall, item.offset, item.width); const start = toPaper(opening.start, layout); const end = toPaper(opening.end, layout);
   const width = item.width * layout.factor; const hinge = item.swing === 'left' ? start : end;
+  const closed = item.swing === 'left' ? end : start;
   const open = { x: hinge.x + opening.normal.x * width, y: hinge.y + opening.normal.y * width };
   out.push(`${rgb.paper} RG ${n(Math.max(1.3, wall.thickness * layout.factor + .8))} w ${pdfPoint(start, layout.height)} m ${pdfPoint(end, layout.height)} l S`, `${rgb.ink} RG ${n(.55)} w ${pdfPoint(hinge, layout.height)} m ${pdfPoint(open, layout.height)} l S`);
+  const startAngle = Math.atan2(closed.y - hinge.y, closed.x - hinge.x);
+  let sweep = Math.atan2(open.y - hinge.y, open.x - hinge.x) - startAngle;
+  while (sweep > Math.PI) sweep -= Math.PI * 2;
+  while (sweep < -Math.PI) sweep += Math.PI * 2;
+  const arc = Array.from({ length: 13 }, (_, index) => ({
+    x: hinge.x + Math.cos(startAngle + sweep * index / 12) * width,
+    y: hinge.y + Math.sin(startAngle + sweep * index / 12) * width,
+  }));
+  out.push(`${rgb.muted} RG ${n(.35)} w [${n(1.4)} ${n(1)}] 0 d ${pdfPoint(arc[0], layout.height)} m ${arc.slice(1).map(point => pdfPoint(point, layout.height) + ' l').join(' ')} S [] 0 d`);
 }
 
 function pdfWindow(out: string[], item: Extract<Plan['items'][number], {kind:'window'}>, wall: Wall, layout: ReturnType<typeof makeLayout>): void {
