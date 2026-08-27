@@ -1,0 +1,14 @@
+{
+  "slug": "floorplan-text-dsl",
+  "title": "Text-to-floor-plan: a Markdown-like DSL that renders scaled SVG/PDF blueprints",
+  "user": "DIYers, renters, small landlords and engineers who want a scaled 2D floor plan or simple blueprint by typing wall/door/window coordinates, not by fighting CAD UIs",
+  "job_to_be_done": "Produce a clean, dimensioned SVG/PDF from diff-able text.",
+  "smallest_useful_product": "Static split-pane editor with units, scale, walls, doors, windows, labels and dimensions; live SVG; true-scale SVG/PDF and PNG exports; URL-hash and file sharing.",
+  "artifact_class": "static-web",
+  "monetization": "free, MIT-licensed DSL",
+  "constraints": [
+    "Dimension and print scale must be correct",
+    "Do not imply building-code compliance",
+    "Version the DSL"
+  ]
+}
