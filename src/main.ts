@@ -188,7 +188,11 @@ render();
 source.addEventListener('input', scheduleRender);
 source.addEventListener('scroll', updateLines);
 source.addEventListener('keydown', event => {
-  if (event.key === 'Tab') {
+  // Tab and Shift+Tab keep their native focus-navigation behaviour. This is
+  // important in a plain textarea: users must always be able to leave it.
+  // Ctrl/Cmd+] mirrors the familiar editor indent shortcut without trapping
+  // keyboard focus.
+  if ((event.ctrlKey || event.metaKey) && event.key === ']') {
     event.preventDefault();
     const start = source.selectionStart;
     source.setRangeText('  ', start, source.selectionEnd, 'end');

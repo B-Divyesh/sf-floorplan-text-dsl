@@ -7,6 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
+    "test:keyboard": "node tests/keyboard-navigation.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "devDependencies": {

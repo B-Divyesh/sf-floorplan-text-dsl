@@ -1,93 +1,62 @@
-# Floorplan Text v1 handoff
+# Floorplan Text repair handoff
 
-## Independent verification status — FAIL
+## Repair status — ready to deploy
 
-Candidate `d42e9041a300bb8cc8686696975205106d1583fe` and
-<https://floorplan-text-dsl.sociobot.in/> were independently verified on
-2026-08-27. The build, unit tests, normal/malformed/recovery authoring flow,
-true-scale SVG/PDF/PNG exports, mobile tabs, offline live reload, deployed
-artifact parity, privacy/network behavior, headers, bundle budgets, and axe
-audits passed. It is **not release-ready**: the primary textarea traps both
-Tab and Shift+Tab, preventing keyboard-only navigation to the rest of the
-application. Live hashed JS/CSS also use only `max-age=30` rather than
-long-lived immutable caching. See `.factory/verification-2.md` for exact
-commands, evidence, severity, and retest requirements.
+This repair addresses the two blockers recorded in
+`.factory/verification-2.md` at baseline commit
+`d17e4c32224ee186812b8848de655a086e197265`. The DSL, live preview, and
+true-scale SVG/PDF/PNG export paths were left unchanged.
 
-## What shipped
+## What changed
 
-- A local-first split-pane drafting application built with Vite and strict
-  TypeScript, with no runtime dependencies or remote assets.
-- A documented, versioned DSL covering paper, units, scale, walls, doors,
-  windows, labels, dimensions, comments, and titles.
-- Live line-specific validation. Invalid edits retain the last valid preview
-  and link each error back to its source line.
-- Scale-preserving layout. SVGs use physical millimetres; PDFs use the
-  corresponding point-sized MediaBox; PNGs render at 300 DPI. Oversized plans
-  are identified and blocked from misleading true-scale export.
-- Source-file open/save, local autosave, self-contained URL-hash sharing,
-  syntax help, a complete example, keyboard shortcuts, and a reversible
-  confirmation before replacing work.
-- Deliberate desktop and 390 px mobile layouts, where Source and Preview become
-  full-size tabs. Empty, error, offline, save, and export-feedback states are
-  present.
-- An installable offline shell, privacy and terms pages, strict static-host
-  headers, robots/sitemap files, MIT license, and product README.
-- The “measured field notebook” visual system and generated-image provenance
-  are recorded in .factory/design.md. The accepted image was reviewed,
-  optimized to a 52 KB WebP, and disclosed in the footer.
+- The primary `#source` textarea no longer prevents `Tab` or `Shift+Tab`.
+  They use the browser's normal focus order, so keyboard users can leave the
+  editor in either direction. `Ctrl/Command + ]` now intentionally inserts a
+  two-space indent and is described by the editor's accessible help text and
+  in the README.
+- Added `tests/keyboard-navigation.mjs` and `npm run test:keyboard`. It runs
+  the production build in Chromium at 1366 × 900 and 390 × 844, proves Tab
+  reaches the following control, Shift+Tab reaches the preceding control, and
+  confirms the explicit indent shortcut still works.
+- Moved `staticwebapp.config.json` to the repository/build root and ensured
+  Vite copies it to `dist/staticwebapp.config.json`. Its global policy makes
+  HTML and the service worker revalidate (`no-cache, max-age=0,
+  must-revalidate`), while `/assets/*` receives `public, max-age=31536000,
+  immutable`.
 
 ## Run and verify
 
-Requirements: Node.js 20+ and npm.
+Requirements: Node.js 20+ and npm. Playwright's Chromium is required for the
+browser regression (`npx playwright install chromium`).
 
-    npm install
+    npm ci
     npm test
     npm run build
+    npm run test:keyboard
     npm run preview
 
-The exact deploy build command is npm run build. Output lands in dist/ with
-dist/index.html at its root.
+Verification run on 2026-08-27:
 
-Verification completed on 27 August 2026:
+- `npm ci`: passed, 0 audit vulnerabilities.
+- `npm test`: passed, 6 tests.
+- `npm run build`: passed; `dist/` was produced and contains the byte-identical
+  `dist/staticwebapp.config.json` deploy configuration. The initial bundles
+  remain 22.39 KB JavaScript (8.46 KB gzip) and 12.06 KB CSS (3.53 KB gzip).
+- `npm run test:keyboard`: passed on desktop and mobile production preview.
+- axe-core Playwright checks of the production preview at 1366 × 900 and
+  390 × 844: 0 violations (including 0 serious/critical) and 0 console errors.
+- Live-header baseline checked with `curl -sSI` against the current production
+  URL. It still serves the pre-repair artifact, so its HTML, old hashed asset,
+  and service worker correctly still report `public, must-revalidate,
+  max-age=30`. The new headers require the factory's normal deployment of this
+  commit; after deploy, recheck `/`, the new `/assets/index-*.js`, and `/sw.js`
+  to confirm the policies above.
 
-- Unit/integration suite: 6 tests passed. Coverage includes the complete
-  example, malformed syntax, missing wall references, out-of-bounds openings,
-  HTML escaping, physical SVG dimensions, and the PDF MediaBox.
-- TypeScript plus Vite production build: passed.
-- Production payload: 22.37 KB JavaScript / 8.47 KB gzip; 12.06 KB CSS / 3.53
-  KB gzip. No hosted fonts. Hero/support WebP: 52 KB.
-- Browser smoke test in Chromium: no console or page errors. Invalid-source
-  recovery, dialog, mobile tab, SVG download, PDF download, and PNG download
-  all passed.
-- Export inspection: SVG 420 × 297 mm; PDF begins with PDF 1.4 and uses the
-  1190.551 × 841.890 pt A3 landscape MediaBox; PNG is 4961 × 3508 at 300 DPI.
-- Offline smoke test: a controlled second load rendered the complete editor,
-  current preview, and offline status with the network disabled.
-- Factory verify-url: title present, html language en, one h1, main landmark,
-  all images have alt text, all buttons have accessible names, zero console
-  errors.
-- axe-core Playwright audits: zero violations at 1366 × 900 and 390 × 844.
-- Lighthouse 12.8.2 mobile: Performance 100, Accessibility 100, Best Practices
-  100, SEO 100. FCP 0.9 s, LCP 1.2 s, CLS 0.002, TBT 0 ms.
+## Known product boundaries
 
-Local audit artefacts were generated under .factory/evidence/ and are ignored
-from Git because they are reproducible.
-
-## Known v1 boundaries
-
-- Output is one sheet, not tiled or multi-page. Plans that do not fit the chosen
-  sheet at true scale must use a smaller scale or larger sheet.
+- Output is one sheet, not tiled or multi-page. Plans that do not fit the
+  chosen sheet at true scale must use a smaller scale or larger sheet.
 - Geometry is intentionally 2D and text-first: no furniture library, DXF
   import, collaboration, or 3D mode.
 - PDF uses built-in PDF fonts for portability; unsupported non-ASCII label
   characters are replaced there. SVG and PNG retain Unicode labels.
-- Door handing is left/right relative to the wall direction. There is no
-  building-code, structural, or constructability validation.
-
-## Sensible next steps
-
-- Add room-area polygons and optional automatic interior dimensions without
-  changing existing DSL v1 parsing.
-- Add a print calibration strip and automated PDF visual-regression fixtures.
-- If real usage warrants it, package the same parser/renderer as the optional
-  desktop/CLI bundle described in the brief.

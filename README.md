@@ -75,7 +75,8 @@ size” or 100% scaling, and measure the 6 m dimension: at 1:50 it must occupy
 
 - Ctrl/Command + Enter: render immediately
 - Ctrl/Command + S: download the source
-- Tab in the editor: insert two spaces
+- Tab and Shift+Tab in the editor: move to the next and previous controls
+- Ctrl/Command + ] in the editor: insert two spaces
 - Escape: close the syntax dialog
 - .floorplan files are UTF-8 plain text
 
