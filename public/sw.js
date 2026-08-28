@@ -1,4 +1,4 @@
-const CACHE = 'floorplan-text-v5';
+const CACHE = 'floorplan-text-v6';
 const SHELL = ['/manifest.webmanifest', '/assets/icon.svg', '/assets/apple-touch-icon.png', '/assets/notebook-floorplan.webp', '/assets/social-preview.jpg'];
 
 self.addEventListener('install', event => {

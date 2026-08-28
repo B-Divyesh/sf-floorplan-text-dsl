@@ -1,1 +1,1 @@
-Draw scaled floor plans from plain text, then export SVG, PDF, or PNG.
+Turn floor-plan text into scaled SVG, PDF, or PNG drawings.

@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 28 August 2026 for polish round 3. Hyphenated terms, product names,
+Audited 28 August 2026 for polish round 4. Hyphenated terms, product names,
 file types, and shortcut chords count as one word. Source examples are input,
 not prose. No sentence exceeds 22 words. No banned marketing word appears.
 
@@ -12,7 +12,8 @@ not prose. No sentence exceeds 22 words. No banned marketing word appears.
 | For renters, DIYers, landlords, and engineers who need a printable measured plan without CAD. | 14 | First-screen browser test |
 | Opens the Garden studio sample. | 5 | `demo-sample` |
 | Demo changes stay separate from your plans. | 7 | `demo-isolation` |
-| Runs in this browser | 4 | `private-browser` |
+| Plans stay in this browser | 5 | `private-browser` |
+| Works offline after your first visit | 6 | `offline-editor` |
 | Exports SVG, PDF, and PNG | 5 | Three export claims |
 | Free under the MIT License | 5 | `free-mit` |
 | Demo — sample data, nothing is saved to your plans. | 9 | `demo-isolation` |
@@ -94,7 +95,16 @@ studio sample”, “Floor-plan text”, “Scaled preview”, and “Scaled pla
 | MIT. | 1 | `free-mit` |
 | See LICENSE. | 2 | Instruction |
 
-## Round 3 wording decisions
+## Round 4 wording decisions
+
+- “Runs in this browser” became “Plans stay in this browser” so the privacy
+  fact states what happens to a visitor’s plan.
+- “Works offline after your first visit” is now a first-screen fact backed by
+  the offline reload, edit, export, and sharing test.
+- “Exports SVG, PDF, and PNG” remains as a fourth fact beside the sample
+  action, preserving a concrete statement of the result.
+
+## Earlier wording decisions
 
 - “Vector drawing with physical millimetres” became “Editable SVG sized in
   millimetres”.

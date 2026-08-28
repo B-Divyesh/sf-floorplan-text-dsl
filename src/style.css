@@ -394,7 +394,7 @@ dialog::backdrop { background: rgba(23, 43, 53, .55); backdrop-filter: blur(2px)
   .route-intro { grid-template-columns: 1fr; padding: 24px 24px 22px 36px; }
   .route-intro::before { left: 20px; top: 24px; bottom: 22px; }
   .route-intro .eyebrow, .route-intro h1, .route-summary, .hero-actions, .plain-facts { grid-column: 1; }
-  .plain-facts { grid-row: auto; display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 8px; }
+  .plain-facts { grid-row: auto; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 8px; }
   .plain-facts li { padding-inline: 8px; border-bottom: 0; border-right: 1px solid var(--grid); font-size: 11px; }
   .plain-facts li:last-child { border-right: 0; }
   .editor-route { padding-inline: 0; }

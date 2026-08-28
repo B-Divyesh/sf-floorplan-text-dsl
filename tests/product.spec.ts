@@ -115,6 +115,9 @@ test('@claim:true-scale calculates dimensions and sheet fit', async ({ page }) =
 test('@claim:offline-editor reloads, edits, exports, and shares offline', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/demo');
+  await page.goto('/');
+  await expect(page.locator('#plain-facts')).toContainText('Works offline after your first visit');
+  await page.goto('/demo');
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
   await page.reload();
   await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
@@ -132,6 +135,9 @@ test('@claim:private-browser keeps the full demo flow same-origin and cookie-fre
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/demo');
+  await page.goto('/');
+  await expect(page.locator('#plain-facts')).toContainText('Plans stay in this browser');
   await page.goto('/demo');
   await expect(page.locator('#preview svg')).toBeVisible();
   await expect(page.locator('input[type="password"], [data-account], [data-api-key]')).toHaveCount(0);
@@ -332,6 +338,10 @@ test('@claim:keyboard-shortcuts supports Control and Command for render, save, a
 
 test('@claim:free-mit serves the stated license from the demo', async ({ page }) => {
   await page.goto('/demo');
+  await expect(page.locator('#plain-facts')).toBeHidden();
+  await page.goto('/');
+  await expect(page.locator('#plain-facts')).toContainText('Free under the MIT License');
+  await page.goto('/demo');
   const response = await page.request.get('/LICENSE.txt');
   expect(response.ok()).toBe(true);
   expect(await response.text()).toContain('MIT License');
@@ -367,14 +377,25 @@ test('first screen names the job, audience, first action, and outcome', async ({
   await expect(page.locator('#page-summary')).toContainText('renters, DIYers, landlords, and engineers');
   await expect(page.getByRole('link', { name: 'Try it with sample data' })).toBeVisible();
   await expect(page.locator('#hero-actions')).toContainText('Opens the Garden studio sample');
+  await expect(page.locator('#plain-facts li')).toHaveText([
+    'Plans stay in this browser',
+    'Works offline after your first visit',
+    'Exports SVG, PDF, and PNG',
+    'Free under the MIT License',
+  ]);
+  for (const fact of await page.locator('#plain-facts li').all()) {
+    const box = await fact.boundingBox();
+    expect(box, 'each first-screen fact has a layout box').not.toBeNull();
+    expect(box!.y + box!.height, 'each first-screen fact stays above the 844px fold').toBeLessThanOrEqual(844);
+  }
   await expect(page.locator('.brand')).toContainText(/Floorplan\s*Text/);
   await expect(page.locator('.brand span')).toBeVisible();
-  await page.screenshot({ path: '.factory/evidence/polish-3-first-screen-mobile.png', fullPage: false });
+  await page.screenshot({ path: '.factory/evidence/polish-4-first-screen-mobile.png', fullPage: false });
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
   await expect(page).toHaveURL(/\/demo$/);
   await expect(page.locator('#demo-banner')).toBeVisible();
   await expect(page.locator('#preview svg')).toContainText('Garden studio');
-  await page.screenshot({ path: '.factory/evidence/polish-3-demo-mobile.png', fullPage: false });
+  await page.screenshot({ path: '.factory/evidence/polish-4-demo-mobile.png', fullPage: false });
 });
 
 test('landing explains the workflow, limits, and browser storage', async ({ page }) => {

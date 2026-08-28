@@ -37,7 +37,7 @@
   {
     "id": "offline-editor",
     "claim": "The editor, SVG export, and share-link copy work offline after the first visit.",
-    "where": "offline banner, README",
+    "where": "first-screen facts, offline banner, README",
     "test": "npm run test:browser -- --grep @claim:offline-editor",
     "sandbox": "fresh /demo; install service worker, go offline, reload, edit, export, and copy"
   },
