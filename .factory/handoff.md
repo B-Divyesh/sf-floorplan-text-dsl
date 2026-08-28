@@ -1,3 +1,37 @@
+# Floorplan Text review round 2 handoff
+
+## Review outcome
+
+This reviewer did not modify product code. The adversarial review is in
+.factory/review-2.md and its verdict is **FAIL**. The clean-clone quality gates
+and all 14 declared claims passed, including live deployment checks.
+
+Open findings are F-2-1 through F-2-6: missing required landing explanation
+and boundary sections; inaccurate unregistered sample wording; visible DSL
+jargon (a partial recurrence of F-1-11); hidden mobile wordmark; unlisted README
+keyboard shortcuts; and README implementation jargon. The review gives exact
+quotes and concrete fixes.
+
+## How verified
+
+- Fresh live browser contexts at 390 × 844 and 1440 × 900 checked first read
+  and normal-load errors.
+- Fresh clone: /tmp/floorplan-review2-505RKx at 09aeadd.
+- npm ci passed with 0 vulnerabilities; npm test passed 6/6; npm run build
+  produced dist/.
+- All 14 registered claim tests passed from the clean clone. The full 19-test
+  suite also passed against https://floorplan-text-dsl.sociobot.in.
+- The demo namespace, offline/privacy interception, 404, metadata,
+  history/focus, and all earlier review fixes were checked as recorded in the
+  review.
+
+## Repository state
+
+Only this handoff and .factory/review-2.md were changed for the review. Product
+code was not changed.
+
+---
+
 # Floorplan Text polish round 1 handoff
 
 ## Outcome
