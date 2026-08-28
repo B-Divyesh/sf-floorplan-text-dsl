@@ -1,16 +1,42 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/privacy/*", "/terms/*", "/sw.js", "/manifest.webmanifest", "/robots.txt", "/sitemap.xml"]
+    "exclude": ["/assets/*", "/sw.js", "/manifest.webmanifest", "/robots.txt", "/sitemap.xml"]
   },
   "globalHeaders": {
     "Cache-Control": "no-cache, max-age=0, must-revalidate",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-    "Content-Security-Policy": "default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' blob: data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
   },
   "routes": [
+    {
+      "route": "/",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/index.html",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/demo",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/privacy",
+      "rewrite": "/privacy/index.html"
+    },
+    {
+      "route": "/terms",
+      "rewrite": "/terms/index.html"
+    },
+    {
+      "route": "/404",
+      "rewrite": "/404.html",
+      "statusCode": 404
+    },
     {
       "route": "/assets/*",
       "headers": {
@@ -22,6 +48,32 @@
       "headers": {
         "Cache-Control": "no-cache, max-age=0, must-revalidate"
       }
+    },
+    {
+      "route": "/manifest.webmanifest"
+    },
+    {
+      "route": "/robots.txt"
+    },
+    {
+      "route": "/sitemap.xml"
+    },
+    {
+      "route": "/404.css"
+    },
+    {
+      "route": "/404.html"
+    },
+    {
+      "route": "/site-page.css"
+    },
+    {
+      "route": "/LICENSE.txt"
+    },
+    {
+      "route": "/*",
+      "rewrite": "/404.html",
+      "statusCode": 404
     }
   ],
   "mimeTypes": {

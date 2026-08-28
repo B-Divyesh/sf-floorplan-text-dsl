@@ -1,0 +1,100 @@
+[
+  {
+    "id": "text-to-plan",
+    "claim": "Version 1 text renders walls, doors, windows, labels, and dimensions.",
+    "where": "page title, preview, syntax guide, README",
+    "test": "npm run test:browser -- --grep @claim:text-to-plan",
+    "sandbox": "fresh browser context at /demo; assert each sample primitive in the rendered SVG"
+  },
+  {
+    "id": "svg-export",
+    "claim": "Exports vector SVG with physical millimetre dimensions.",
+    "where": "first-screen facts, export menu, README",
+    "test": "npm run test:browser -- --grep @claim:svg-export",
+    "sandbox": "fresh /demo; download SVG and inspect size, vector elements, and absence of raster images"
+  },
+  {
+    "id": "pdf-export",
+    "claim": "Exports a one-page vector PDF at the selected paper size.",
+    "where": "first-screen facts, export menu, README",
+    "test": "npm run test:browser -- --grep @claim:pdf-export",
+    "sandbox": "fresh /demo; download PDF and inspect page count, MediaBox, and absence of image objects"
+  },
+  {
+    "id": "png-export",
+    "claim": "Exports a PNG with paper-size pixels at 300 DPI.",
+    "where": "first-screen facts, export menu, README",
+    "test": "npm run test:browser -- --grep @claim:png-export",
+    "sandbox": "fresh /demo; download PNG and inspect its A3 300-DPI pixel dimensions"
+  },
+  {
+    "id": "true-scale",
+    "claim": "Calculates physical dimensions and reports whether the plan fits its sheet at full scale.",
+    "where": "headline, preview status, README",
+    "test": "npm run test:browser -- --grep @claim:true-scale",
+    "sandbox": "fresh /demo; inspect 1:50 output and compare fitting A3 with an oversized A4 plan"
+  },
+  {
+    "id": "offline-editor",
+    "claim": "The editor, SVG export, and share-link copy work offline after the first visit.",
+    "where": "offline banner, README",
+    "test": "npm run test:browser -- --grep @claim:offline-editor",
+    "sandbox": "fresh /demo; install service worker, go offline, reload, edit, export, and copy"
+  },
+  {
+    "id": "private-browser",
+    "claim": "Plans stay in the browser with no cookies, analytics, third-party scripts, or remote fonts.",
+    "where": "first-screen facts, footer, privacy page, README",
+    "test": "npm run test:browser -- --grep @claim:private-browser",
+    "sandbox": "fresh /demo; intercept the full edit, guide, export, and share flow and inspect cookies"
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "Demo data never reads or changes the visitor's real saved plan.",
+    "where": "demo banner, privacy page, demo guide",
+    "test": "npm run test:browser -- --grep @claim:demo-isolation",
+    "sandbox": "seed the real key, exercise /demo reset and exit, and inspect real and demo storage keys"
+  },
+  {
+    "id": "local-autosave",
+    "claim": "Valid plan text is saved in the selected browser workspace and restored after reload.",
+    "where": "save state, privacy page, README",
+    "test": "npm run test:browser -- --grep @claim:local-autosave",
+    "sandbox": "fresh /demo; edit valid text, wait for save, reload, and compare the source"
+  },
+  {
+    "id": "units-and-paper",
+    "claim": "Supports mm, cm, m, in, ft and A4, A3, A2, Letter, Tabloid in both orientations.",
+    "where": "syntax guide, README",
+    "test": "npm run test:browser -- --grep @claim:units-and-paper",
+    "sandbox": "fresh /demo; render every advertised unit, paper, and orientation combination"
+  },
+  {
+    "id": "live-validation",
+    "claim": "Reports line-specific errors while retaining the last valid preview.",
+    "where": "editor, README",
+    "test": "npm run test:browser -- --grep @claim:live-validation",
+    "sandbox": "fresh /demo; enter invalid line 2, compare preview, then recover with valid text"
+  },
+  {
+    "id": "file-and-link-sharing",
+    "claim": "Imports and saves plain-text floorplan files and restores plans from share links.",
+    "where": "toolbar, README",
+    "test": "npm run test:browser -- --grep @claim:file-and-link-sharing",
+    "sandbox": "fresh /demo; import a fixture, inspect the saved file, then open its copied link in a new page"
+  },
+  {
+    "id": "mobile-keyboard",
+    "claim": "Provides mobile editor and preview tabs without trapping keyboard focus.",
+    "where": "mobile workspace, README",
+    "test": "npm run test:browser -- --grep @claim:mobile-keyboard",
+    "sandbox": "fresh 390px /demo; switch tabs, traverse textarea controls, and close the dialog with Escape"
+  },
+  {
+    "id": "free-mit",
+    "claim": "Floorplan Text is free under the MIT License.",
+    "where": "first-screen facts, terms, README",
+    "test": "npm run test:browser -- --grep @claim:free-mit",
+    "sandbox": "fresh /demo; fetch the same-origin license and inspect its heading"
+  }
+]

@@ -1,95 +1,103 @@
 # Floorplan Text
 
-Floorplan Text is a small, versioned text language and browser editor for making
-clean, dimensioned 2D floor plans. It is for DIYers, renters, small landlords,
-and engineers who need a measured drawing without learning a CAD interface.
+Draw a scaled floor plan from ordinary text. Floorplan Text is for renters,
+DIYers, landlords, and engineers who need a measured drawing without CAD.
 
-Write walls, openings, labels, and dimensions on the left; inspect the live
-sheet on the right; export true-scale SVG or PDF for printing, or a 300 DPI PNG
-for sharing. Plans stay on the device and remain ordinary, diff-friendly text.
+Type walls and measurements. See the drawing update beside the text. Export
+SVG, PDF, or PNG.
 
-Live product: <https://floorplan-text-dsl.sociobot.in>
+Live editor: <https://floorplan-text-dsl.sociobot.in/>
 
-## What v1 includes
+One-click demo: <https://floorplan-text-dsl.sociobot.in/demo>
 
-- DSL v1 with units, scale, sheet, wall, door, window, label, and dimension
-  statements
-- A3, A4, A2, Letter, and Tabloid sheets in either orientation
-- SVG dimensions in physical millimetres and vector PDF page boxes in points
-- Live, line-specific validation with the last valid preview retained
-- SVG, one-page vector PDF, and 300 DPI PNG exports
-- .floorplan source files and self-contained URL-hash sharing
-- Local autosave, installable/offline shell, mobile editor/preview tabs, and
-  complete keyboard operation
+## What version 1 supports
 
-Floorplan Text does not check structural design, site measurements, planning
-rules, accessibility requirements, or building codes.
+- Units: mm, cm, m, in, and ft
+- Paper: A4, A3, A2, Letter, and Tabloid in either orientation
+- Walls, doors, windows, labels, and dimensions
+- Line-specific errors that keep the last valid preview visible
+- SVG with physical millimetre dimensions
+- One-page vector PDF at the selected paper size
+- PNG with paper-size pixels at 300 DPI
+- Plain-text `.floorplan` files and self-contained share links
+- Local autosave, an offline editor, mobile tabs, and keyboard operation
 
-## DSL quick start
+Floorplan Text does not check structures, sites, planning rules, accessibility
+requirements, or building codes.
 
-    plan v1
-    title "Garden studio"
-    units cm
-    scale 1:50
-    sheet A3 landscape
+## Text format quick start
 
-    wall north from 0,0 to 600,0 thickness 15
-    wall east from 600,0 to 600,420 thickness 15
-    wall south from 600,420 to 0,420 thickness 15
-    wall west from 0,420 to 0,0 thickness 15
+```text
+plan v1
+title "Garden studio"
+units cm
+scale 1:50
+sheet A3 landscape
 
-    door entry on south at 240 width 90 swing right
-    window view on north at 190 width 180
-    label "Studio" at 300,190 size 24
-    dimension from 0,0 to 600,0 offset -45
+wall north from 0,0 to 600,0 thickness 15
+wall east from 600,0 to 600,420 thickness 15
+wall south from 600,420 to 0,420 thickness 15
+wall west from 0,420 to 0,0 thickness 15
 
-Door and window offsets run from the named wall’s first point. Dimension offsets
-are perpendicular to their start-to-end direction. Open the in-product syntax
-guide for all supported paper names and units.
+door entry on south at 240 width 90 swing right
+window view on north at 190 width 180
+label "Studio" at 300,190 size 24
+dimension from 0,0 to 600,0 offset -45
+```
+
+Opening positions start at the named wall’s first point. Dimension offsets are
+perpendicular to the start-to-end direction.
 
 ## Run locally
 
-Requirements: Node.js 20 or newer and npm.
+Use Node.js 20 or newer.
 
-    npm install
-    npm run dev
+```sh
+npm ci
+npm run dev
+```
 
-Then open the printed local URL. No environment variables, accounts, network
-services, or API keys are required at runtime.
+Open the printed local address. The editor needs no account, API key, or
+runtime service.
 
 ## Test and build
 
-    npm test
-    npm run build
-    npm run preview
+```sh
+npm test
+npm run build
+npm run test:browser
+```
 
-The production output is written to dist/, with dist/index.html at its root.
-The Azure Static Web Apps configuration is copied into that directory during
-the build.
+`npm test` runs the parser and export unit tests. The browser suite covers
+claims, routing, keyboard use, accessibility, privacy, and offline use.
 
-For a manual print-scale check, export the example as PDF, print with “Actual
-size” or 100% scaling, and measure the 6 m dimension: at 1:50 it must occupy
-120 mm. Never use “Fit to page” for a scale drawing.
+The production build is in `dist/`. It includes the Azure Static Web Apps
+route and security configuration.
+
+Export the sample PDF for a manual scale check. Print at Actual size. At 1:50,
+the 6 m dimension measures 120 mm.
 
 ## Keyboard and files
 
-- Ctrl/Command + Enter: render immediately
-- Ctrl/Command + S: download the source
-- Tab and Shift+Tab in the editor: move to the next and previous controls
-- Ctrl/Command + ] in the editor: insert two spaces
-- Escape: close the syntax dialog
-- .floorplan files are UTF-8 plain text
+- Ctrl/Command + Enter renders now.
+- Ctrl/Command + S saves the source file.
+- Tab and Shift+Tab leave and return to the editor.
+- Ctrl/Command + ] inserts two spaces.
+- Escape closes the text syntax guide.
+- `.floorplan` files are UTF-8 plain text.
 
-## Privacy and architecture
+## Privacy
 
-Everything runs in the browser. The latest source is kept in localStorage;
-share links encode source after the URL hash, which is not sent to the server.
-There are no cookies, analytics, third-party scripts, or hosted fonts. See the
-[privacy policy](https://floorplan-text-dsl.sociobot.in/privacy/) for details.
+Valid plan text stays in browser storage. Share links put source after the
+address’s `#` mark, which browsers do not send to a server.
 
-The implementation is Vite + strict TypeScript with no runtime dependencies.
-src/parser.ts owns DSL parsing and validation, src/renderer.ts owns physical
-SVG layout, and src/pdf.ts writes the equivalent vector PDF.
+The release has no cookies, analytics, third-party scripts, or remote fonts.
+Read the [privacy policy](https://floorplan-text-dsl.sociobot.in/privacy).
+
+## Deploy
+
+The factory deploys `dist/` as an Azure Static Web App. Repository work does
+not change DNS, billing, or infrastructure.
 
 ## License
 

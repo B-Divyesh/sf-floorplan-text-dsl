@@ -84,7 +84,7 @@ function renderDoor(item: Door, wall: Wall, layout: Layout): string {
   const ny = opening.normal.y * width;
   const open = { x: hinge.x + nx, y: hinge.y + ny };
   const sweep = item.swing === 'left' ? 1 : 0;
-  return `<g class="door" data-id="${esc(item.id)}">
+  return `<g class="door" data-kind="door" data-id="${esc(item.id)}">
     ${line(start.x, start.y, end.x, end.y, `stroke="${PAPER}" stroke-width="${Math.max(1.3, wall.thickness * layout.factor + 0.8).toFixed(3)}"`)}
     ${line(hinge.x, hinge.y, open.x, open.y, `stroke="${INK}" stroke-width="0.55"`)}
     <path d="M ${closed.x.toFixed(3)} ${closed.y.toFixed(3)} A ${width.toFixed(3)} ${width.toFixed(3)} 0 0 ${sweep} ${open.x.toFixed(3)} ${open.y.toFixed(3)}" fill="none" stroke="${MUTED}" stroke-width="0.35" stroke-dasharray="1.4 1"/>
@@ -97,7 +97,7 @@ function renderWindow(item: WindowItem, wall: Wall, layout: Layout): string {
   const start = toPaper(opening.start, layout);
   const end = toPaper(opening.end, layout);
   const n = opening.normal;
-  return `<g class="window" data-id="${esc(item.id)}">
+  return `<g class="window" data-kind="window" data-id="${esc(item.id)}">
     ${line(start.x, start.y, end.x, end.y, `stroke="${PAPER}" stroke-width="${Math.max(1.4, wall.thickness * layout.factor + 0.8).toFixed(3)}"`)}
     ${line(start.x + n.x * 0.75, start.y + n.y * 0.75, end.x + n.x * 0.75, end.y + n.y * 0.75, `stroke="${INK}" stroke-width="0.4"`)}
     ${line(start.x - n.x * 0.75, start.y - n.y * 0.75, end.x - n.x * 0.75, end.y - n.y * 0.75, `stroke="${INK}" stroke-width="0.4"`)}
@@ -121,7 +121,7 @@ function renderDimension(item: Dimension, plan: Plan, layout: Layout): string {
   const text = item.text ?? `${format(measured)} ${plan.units}`;
   const tx = (da.x + db.x) / 2;
   const ty = (da.y + db.y) / 2 - 1.8;
-  return `<g class="dimension">
+  return `<g class="dimension" data-kind="dimension">
     ${line(a.x, a.y, da.x + nx * 2, da.y + ny * 2, `stroke="${MUTED}" stroke-width="0.3"`)}
     ${line(b.x, b.y, db.x + nx * 2, db.y + ny * 2, `stroke="${MUTED}" stroke-width="0.3"`)}
     ${line(da.x, da.y, db.x, db.y, `stroke="${ACCENT}" stroke-width="0.35" marker-start="url(#arrow)" marker-end="url(#arrow)"`)}
@@ -136,7 +136,7 @@ export function renderSvg(plan: Plan): { svg: string; layout: Layout } {
   for (const item of plan.items) {
     if (item.kind === 'wall') {
       const a = toPaper(item.from, layout); const b = toPaper(item.to, layout);
-      body.push(`<g class="wall" data-id="${esc(item.id)}">${line(a.x, a.y, b.x, b.y, `stroke="${INK}" stroke-width="${Math.max(0.55, item.thickness * layout.factor).toFixed(3)}" stroke-linecap="square"`)}</g>`);
+      body.push(`<g class="wall" data-kind="wall" data-id="${esc(item.id)}">${line(a.x, a.y, b.x, b.y, `stroke="${INK}" stroke-width="${Math.max(0.55, item.thickness * layout.factor).toFixed(3)}" stroke-linecap="square"`)}</g>`);
     }
   }
   for (const item of plan.items) {
@@ -145,7 +145,7 @@ export function renderSvg(plan: Plan): { svg: string; layout: Layout } {
     if (item.kind === 'label') {
       const at = toPaper(item.at, layout);
       const size = Math.max(2.8, item.size * layout.factor);
-      body.push(`<text x="${at.x.toFixed(3)}" y="${at.y.toFixed(3)}" text-anchor="middle" dominant-baseline="middle" fill="${INK}" font-size="${size.toFixed(3)}" font-family="Georgia, serif">${esc(item.text)}</text>`);
+      body.push(`<text class="label" data-kind="label" x="${at.x.toFixed(3)}" y="${at.y.toFixed(3)}" text-anchor="middle" dominant-baseline="middle" fill="${INK}" font-size="${size.toFixed(3)}" font-family="Georgia, serif">${esc(item.text)}</text>`);
     }
     if (item.kind === 'dimension') body.push(renderDimension(item, plan, layout));
   }

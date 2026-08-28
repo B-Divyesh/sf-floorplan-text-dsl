@@ -78,7 +78,7 @@ export function parse(source: string): ParseResult {
       plan.items.push({ kind: 'dimension', from: point(x1, y1), to: point(x2, y2), offset: num(offset), text: customText, line });
       return;
     }
-    error(line, 'I could not read this line. Open “Syntax guide” for valid forms.');
+    error(line, 'I could not read this line. Open the text syntax guide for valid forms.');
   });
 
   if (!sawVersion && source.trim()) issues.push({ line: 1, message: 'Add “plan v1” so future versions can read this file safely.', severity: 'warning' });

@@ -76,3 +76,6 @@ specifically for this product using the factory Azure OpenAI image deployment on
 footer. The bitmap is explanatory atmosphere only; all product icons and the
 actual plan renderer are hand-authored SVG/code-native assets.
 
+The 1200 × 630 social preview was cropped from that original notebook image on
+2026-08-28. The 180 px touch icon is a hand-drawn geometric plan mark using the
+same paper, ink, and carmine tokens. Both are original project assets.

@@ -1,12 +1,16 @@
-const CACHE = 'floorplan-text-v2';
-const SHELL = ['/manifest.webmanifest', '/assets/icon.svg', '/assets/notebook-floorplan.webp', '/privacy/', '/terms/', '/legal.css'];
+const CACHE = 'floorplan-text-v3';
+const SHELL = ['/manifest.webmanifest', '/assets/icon.svg', '/assets/apple-touch-icon.png', '/assets/notebook-floorplan.webp', '/assets/social-preview.jpg'];
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     const response = await fetch('/');
     const html = await response.clone().text();
-    await cache.put('/', response);
+    await cache.put('/', response.clone());
+    await cache.put('/demo', response.clone());
+    await cache.put('/privacy', response.clone());
+    await cache.put('/terms', response.clone());
+    await cache.put('/404', response);
     const builtAssets = Array.from(html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g), match => match[1]);
     await cache.addAll([...new Set([...SHELL, ...builtAssets])]);
     await self.skipWaiting();
@@ -26,6 +30,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE).then(cache => cache.put(event.request, copy));
       }
       return response;
-    }).catch(() => caches.match('/')))
+    }).catch(() => event.request.mode === 'navigate' ? caches.match('/') : undefined))
   );
 });

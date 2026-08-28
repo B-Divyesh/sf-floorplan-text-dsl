@@ -4,71 +4,118 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#f4efdf" />
-    <meta name="description" content="Draft scaled, dimensioned floor plans in a small text language, then export true-scale SVG, PDF or PNG." />
+    <meta name="description" content="Draw a scaled floor plan from text and export it as SVG, PDF, or PNG." />
+    <link rel="canonical" href="https://floorplan-text-dsl.sociobot.in/" />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <title>Floorplan Text — Draw measured plans in plain text</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Floorplan Text" />
+    <meta property="og:title" content="Floorplan Text — Draw scaled plans from text" />
+    <meta property="og:description" content="Draw a scaled floor plan from text and export it as SVG, PDF, or PNG." />
+    <meta property="og:url" content="https://floorplan-text-dsl.sociobot.in/" />
+    <meta property="og:image" content="https://floorplan-text-dsl.sociobot.in/assets/social-preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Floorplan Text — Draw scaled plans from text" />
+    <meta name="twitter:description" content="Draw a scaled floor plan from text and export it as SVG, PDF, or PNG." />
+    <meta name="twitter:image" content="https://floorplan-text-dsl.sociobot.in/assets/social-preview.jpg" />
+    <title>Floorplan Text — Draw scaled plans from text</title>
   </head>
   <body>
-    <a class="skip-link" href="#workspace">Skip to editor</a>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Floorplan Text home"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M4 27V5h12v8h12v14H18v-8h-6v8z"/><path d="M9 5v8m13 0v6"/></svg><span>Floorplan<br><em>Text</em></span></a>
-      <div class="headline"><p class="eyebrow">A measured drawing notebook</p><h1>Type the plan. Print it to scale.</h1></div>
-      <button class="text-button" id="syntax-button" type="button">Syntax guide <span aria-hidden="true">?</span></button>
+      <a class="brand" href="/" data-route aria-label="Floorplan Text home"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M4 27V5h12v8h12v14H18v-8h-6v8z"/><path d="M9 5v8m13 0v6"/></svg><span>Floorplan<br><em>Text</em></span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/" data-route>Editor</a>
+        <a href="/demo" data-route>Demo</a>
+        <a href="/privacy" data-route>Privacy</a>
+      </nav>
     </header>
-    <main id="workspace" class="workspace">
-      <section class="tool-strip" aria-label="Drawing tools">
-        <div class="tool-group">
-          <button id="new-button" type="button"><span aria-hidden="true">＋</span> New</button>
-          <button id="open-button" type="button"><span aria-hidden="true">↥</span> Open</button>
-          <input id="file-input" type="file" accept=".floorplan,.txt,text/plain" hidden />
-          <button id="save-button" type="button"><span aria-hidden="true">↓</span> Save source</button>
+
+    <main id="main">
+      <section class="route-intro" aria-labelledby="page-title">
+        <p class="eyebrow" id="page-kicker">Scaled floor-plan editor</p>
+        <h1 id="page-title" tabindex="-1">Draw a scaled floor plan from text</h1>
+        <p class="route-summary" id="page-summary">For renters, DIYers, landlords, and engineers who need a printable measured plan without CAD.</p>
+        <div class="hero-actions" id="hero-actions">
+          <a class="primary-action" href="/demo" data-route>Try it with sample data</a>
+          <span>Opens a furnished Garden studio plan. Nothing is saved to your plans.</span>
         </div>
-        <div class="tool-group tool-group--right">
-          <span class="save-state" id="save-state">Saved locally</span>
-          <button id="share-button" type="button"><span aria-hidden="true">⌁</span> Copy share link</button>
-          <details class="export-menu" id="export-menu">
-            <summary><span aria-hidden="true">↧</span> Export <span aria-hidden="true">⌄</span></summary>
-            <div class="export-popover">
-              <button type="button" data-export="svg" aria-label="Export scaled SVG"><strong>Scaled SVG</strong><small>Vector · physical mm</small></button>
-              <button type="button" data-export="pdf" aria-label="Export scaled PDF"><strong>Scaled PDF</strong><small>Vector · print at 100%</small></button>
-              <button type="button" data-export="png" aria-label="Export PNG image"><strong>PNG image</strong><small>300 DPI · presentation</small></button>
-            </div>
-          </details>
-        </div>
+        <ul class="plain-facts" id="plain-facts">
+          <li>Runs in this browser</li>
+          <li>Exports SVG, PDF, and PNG</li>
+          <li>Free under the MIT License</li>
+        </ul>
       </section>
-      <nav class="mobile-tabs" aria-label="Workspace view"><button type="button" class="active" data-panel="source" aria-pressed="true">Source</button><button type="button" data-panel="preview" aria-pressed="false">Preview</button></nav>
-      <div class="split-workspace">
-        <section class="editor-panel active" data-panel-name="source" aria-labelledby="source-heading">
-          <header class="panel-heading"><div><span class="section-number">01</span><h2 id="source-heading">Source sheet</h2></div><span class="shortcut">⌘/Ctrl + Enter to render</span></header>
-          <div class="editor-wrap"><label for="source" class="visually-hidden">Floor plan source</label><div id="line-numbers" class="line-numbers" aria-hidden="true">1</div><textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="editor-help error-summary"></textarea></div>
-          <footer class="editor-footer"><span id="editor-help">Coordinates use the declared units. Comments begin with #. Tab moves to controls; Ctrl/⌘ + ] inserts two spaces.</span><button type="button" id="example-button">Load example</button></footer>
-          <div id="error-summary" class="issues" aria-live="polite"></div>
-        </section>
-        <section class="preview-panel" data-panel-name="preview" aria-labelledby="preview-heading">
-          <header class="panel-heading"><div><span class="section-number">02</span><h2 id="preview-heading">Print sheet</h2></div><span id="object-count" class="object-count">Ready</span></header>
-          <div class="preview-stage" id="preview-stage" tabindex="0" aria-label="Scrollable floor plan preview">
-            <div id="preview" class="paper-preview"></div>
-            <div id="empty-preview" class="preview-empty" hidden><img src="/assets/notebook-floorplan.webp" width="900" height="600" alt="An open graph-paper notebook with a hand-inked floor plan, pencil and brass ruler" decoding="async" /><div><strong>Your sheet is waiting.</strong><span>Add a wall, or load the measured studio example.</span><button id="empty-example-button" type="button">Load the example</button></div></div>
+
+      <section id="demo-banner" class="demo-banner" hidden aria-label="Demo mode">
+        <p><strong>Demo — sample data, nothing is saved to your plans.</strong></p>
+        <div><button id="reset-demo" type="button">Reset demo</button><a href="/" data-route id="start-real">Start for real</a></div>
+      </section>
+
+      <section id="editor-route" class="editor-route" aria-label="Floor-plan editor">
+        <section class="tool-strip" aria-label="Drawing tools">
+          <div class="tool-group">
+            <button id="new-button" type="button"><span aria-hidden="true">＋</span> Start blank plan</button>
+            <button id="open-button" type="button"><span aria-hidden="true">↥</span> Open floorplan file</button>
+            <input id="file-input" type="file" accept=".floorplan,.txt,text/plain" hidden />
+            <button id="save-button" type="button"><span aria-hidden="true">↓</span> Save floorplan file</button>
           </div>
-          <footer class="preview-footer"><span id="sheet-info">A3 landscape · 1:50</span><span id="fit-info">Print exports use physical paper size</span></footer>
+          <div class="tool-group tool-group--right">
+            <span class="save-state" id="save-state">Saved in this browser</span>
+            <button id="share-button" type="button"><span aria-hidden="true">⌁</span> Copy share link</button>
+            <details class="export-menu" id="export-menu">
+              <summary><span aria-hidden="true">↧</span> Export plan <span aria-hidden="true">⌄</span></summary>
+              <div class="export-popover">
+                <button type="button" data-export="svg"><strong>Export scaled SVG</strong><small>Vector drawing with physical millimetres</small></button>
+                <button type="button" data-export="pdf"><strong>Export scaled PDF</strong><small>Vector page for printing at 100%</small></button>
+                <button type="button" data-export="png"><strong>Export PNG image</strong><small>Paper-size pixels at 300 DPI</small></button>
+              </div>
+            </details>
+            <button class="syntax-button" id="syntax-button" type="button">Open text syntax guide <span aria-hidden="true">?</span></button>
+          </div>
         </section>
-      </div>
-      <aside id="offline-banner" class="offline-banner" hidden><strong>Offline.</strong> Your editor and exports still work; share links can be copied and sent later.</aside>
+        <nav class="mobile-tabs" aria-label="Workspace view"><button type="button" class="active" data-panel="source" aria-pressed="true">Floor-plan text</button><button type="button" data-panel="preview" aria-pressed="false">Scaled preview</button></nav>
+        <div class="split-workspace">
+          <section class="editor-panel active" data-panel-name="source" aria-labelledby="source-heading">
+            <header class="panel-heading"><div><span class="section-number">01</span><h2 id="source-heading">Floor-plan text</h2></div><span class="shortcut">Ctrl/Command + Enter renders</span></header>
+            <div class="editor-wrap"><label for="source" class="visually-hidden">Floor-plan text</label><div id="line-numbers" class="line-numbers" aria-hidden="true">1</div><textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="editor-help error-summary"></textarea></div>
+            <footer class="editor-footer"><span id="editor-help">Coordinates use your chosen units. Lines beginning with # are notes. Tab moves to controls.</span><button type="button" id="example-button">Load Garden studio sample</button></footer>
+            <div id="error-summary" class="issues" aria-live="polite"></div>
+          </section>
+          <section class="preview-panel" data-panel-name="preview" aria-labelledby="preview-heading">
+            <header class="panel-heading"><div><span class="section-number">02</span><h2 id="preview-heading">Scaled plan preview</h2></div><span id="object-count" class="object-count">Ready</span></header>
+            <div class="preview-stage" id="preview-stage" tabindex="0" aria-label="Scrollable scaled floor-plan preview">
+              <div id="preview" class="paper-preview"></div>
+              <div id="empty-preview" class="preview-empty" hidden><img src="/assets/notebook-floorplan.webp" width="900" height="600" alt="An open graph-paper notebook with a hand-inked floor plan, pencil, and brass ruler" decoding="async" /><div><strong>Your plan will appear here.</strong><span>Add a wall or load the Garden studio sample.</span><button id="empty-example-button" type="button">Load Garden studio sample</button></div></div>
+            </div>
+            <footer class="preview-footer"><span id="sheet-info">A3 landscape · 1:50</span><span id="fit-info">Paper-size export ready</span></footer>
+          </section>
+        </div>
+        <aside id="offline-banner" class="offline-banner" hidden><strong>You are offline.</strong> The editor and exports still work. Copy a share link to send later.</aside>
+      </section>
+
+      <article id="content-route" class="content-page" hidden></article>
     </main>
+
     <footer class="site-footer">
-      <p>Private by design: plans stay in this browser. Not a building-code or structural check.</p>
-      <nav aria-label="Legal"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-floorplan-text-dsl">Source</a></nav>
-      <p class="asset-note">Notebook image generated for this product with Azure OpenAI.</p>
+      <p>Draw scaled floor plans from text. Check every dimension before construction.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy" data-route>Privacy</a><a href="/terms" data-route>Terms</a><a href="https://github.com/B-Divyesh/sf-floorplan-text-dsl">Source <span class="visually-hidden">(external)</span></a></nav>
+      <p>Built by Param Factory · Build <span id="build-id">polish-1</span></p>
+      <p class="asset-note">Original notebook image generated for this product with Azure OpenAI.</p>
     </footer>
+
     <dialog id="syntax-dialog" aria-labelledby="syntax-title">
-      <div class="dialog-head"><div><span class="section-number">Field notes</span><h2 id="syntax-title">DSL v1 syntax</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close syntax guide">×</button></div>
+      <div class="dialog-head"><div><span class="section-number">Field notes</span><h2 id="syntax-title">Text format version 1</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close text syntax guide">×</button></div>
       <div class="syntax-grid">
         <div><h3>Set up the sheet</h3><pre><code>plan v1&#10;title "Garden studio"&#10;units cm&#10;scale 1:50&#10;sheet A3 landscape</code></pre><h3>Draw structure</h3><pre><code>wall north from 0,0 to 600,0 thickness 15&#10;door entry on south at 220 width 90 swing left&#10;window view on north at 180 width 160</code></pre></div>
-        <div><h3>Annotate</h3><pre><code>label "Living room" at 300,220 size 18&#10;dimension from 0,0 to 600,0 offset -55&#10;# this line is a comment</code></pre><p>Door and window offsets are measured from the wall’s first point. Positive dimension offsets sit to the left of the direction from start to end.</p><p>Supported units: <code>mm</code>, <code>cm</code>, <code>m</code>, <code>in</code>, <code>ft</code>. Paper: A4, A3, A2, Letter, Tabloid.</p></div>
+        <div><h3>Add notes and dimensions</h3><pre><code>label "Living room" at 300,220 size 18&#10;dimension from 0,0 to 600,0 offset -55&#10;# this line is a note</code></pre><p>Door and window positions start at the wall’s first point.</p><p>A positive dimension offset sits left of its start-to-end direction.</p><p>Units: <code>mm</code>, <code>cm</code>, <code>m</code>, <code>in</code>, <code>ft</code>. Paper: A4, A3, A2, Letter, Tabloid.</p></div>
       </div>
     </dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="route-announcer" class="visually-hidden" aria-live="polite"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
