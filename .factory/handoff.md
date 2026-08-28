@@ -85,7 +85,7 @@ Accessibility and browser checks:
 - `/opt/fleet/lib/verify-url.sh` passed locally with title, language, one h1,
   main landmark, alt text, and no normal-load console errors.
 
-Performance (mobile Lighthouse, production preview):
+Performance (mobile Lighthouse, local production preview):
 
 ```text
 Performance       100
@@ -121,9 +121,45 @@ npm run test:browser -- --grep @claim:demo-isolation
 
 ## Deployment and live verification
 
-Deployment target: <https://floorplan-text-dsl.sociobot.in>. The final live
-commit, deployment command, cold-browser results, screenshots, and URL/header
-checks are appended after deployment.
+Product commit `ca9a953` was pushed to `origin/main`. The static work-order
+command was:
+
+```sh
+/opt/fleet/lib/deploy-static.sh floorplan-text-dsl dist
+```
+
+Azure deployment `370ece66-c5bb-4bb8-8b5c-77e421967663` succeeded at
+<https://floorplan-text-dsl.sociobot.in>.
+
+The live URL was then opened from fresh browser contexts. The same 19-test
+Playwright suite passed against the HTTPS origin, including all 14 claims,
+offline reload, axe, mobile, files, exports, and demo isolation. Both `/demo`
+and `/?demo=1` showed the banner and sample without exposing the seeded real
+plan. `/privacy` and `/terms` returned 200 with their route titles. An unknown
+path returned HTTP 404 with “Page not found — Floorplan Text”; `/404` is the
+direct designed page and returns 200.
+
+`verify-url.sh` passed for `/` and `/demo` with no console errors. Cold checks
+found one h1, main, language, route-specific title/description/canonical, and
+the same OG/Twitter image on every route. All internal assets and links
+returned successfully. Hashed JavaScript returned one-year immutable caching.
+Live security headers include CSP without inline allowances, HSTS, nosniff,
+no-referrer, and restrictive Permissions Policy.
+
+Live mobile Lighthouse results:
+
+```text
+Performance       100
+Accessibility     100
+Best Practices    100
+SEO               100
+LCP               1.2 s
+CLS               0
+Total blocking    0 ms
+```
+
+Live evidence is under `.factory/evidence/live/` locally, including root and
+demo desktop/mobile screenshots, verifier JSON, and Lighthouse JSON.
 
 ## Known gaps
 

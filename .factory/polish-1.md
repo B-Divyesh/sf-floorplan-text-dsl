@@ -84,3 +84,9 @@ checkout after `npm ci`.
 - Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices,
   100 SEO; LCP 1.4 s, CLS 0, total blocking time 0 ms.
 - Bundle: 10.77 kB JavaScript gzip and 4.24 kB CSS gzip.
+- Live suite: 19/19 passed at
+  <https://floorplan-text-dsl.sociobot.in>, including all 14 claims.
+- Live Lighthouse: 100/100/100/100; LCP 1.2 s, CLS 0, blocking time 0 ms.
+- Live routing: `/demo`, `/privacy`, and `/terms` return 200; an unknown path
+  returns the designed 404 with HTTP 404. All route metadata and internal links
+  were cold-checked after deployment.
