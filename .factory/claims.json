@@ -8,10 +8,10 @@
   },
   {
     "id": "svg-export",
-    "claim": "Exports vector SVG with physical millimetre dimensions.",
+    "claim": "Exports editable SVG with physical millimetre dimensions.",
     "where": "first-screen facts, export menu, README",
     "test": "npm run test:browser -- --grep @claim:svg-export",
-    "sandbox": "fresh /demo; download SVG and inspect size, vector elements, and absence of raster images"
+    "sandbox": "fresh /demo; download SVG, inspect its size and vector elements, edit its DOM, and confirm it has no raster images"
   },
   {
     "id": "pdf-export",

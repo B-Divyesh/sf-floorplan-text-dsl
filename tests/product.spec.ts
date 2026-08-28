@@ -71,6 +71,12 @@ test('@claim:svg-export exports vector SVG with physical size', async ({ page })
   expect(data).toContain('width="420mm" height="297mm"');
   expect(data).toContain('data-kind="wall"');
   expect(data).not.toContain('<image');
+  expect(await page.evaluate(svg => {
+    const document = new DOMParser().parseFromString(svg, 'image/svg+xml');
+    const wall = document.querySelector('[data-kind="wall"]');
+    wall?.setAttribute('data-edited', 'true');
+    return new XMLSerializer().serializeToString(document).includes('data-edited="true"');
+  }, data)).toBe(true);
 });
 
 test('@claim:pdf-export exports a one-page vector PDF at paper size', async ({ page }) => {
