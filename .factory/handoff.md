@@ -1,6 +1,38 @@
-# Floorplan Text verification handoff
+# Floorplan Text review handoff
 
-## Status — PASS
+## Review 1 — FAIL
+
+An adversarial first-read review was completed on 2026-08-28 without changing
+product code. The result is documented in `.factory/review-1.md` and is
+**FAIL**. The main blockers are: no visible one-click demo, `/demo` and
+`?demo=1` use and overwrite real localStorage, `.factory/claims.json` and all
+claim tests are absent, and unknown routes render the editor instead of a
+designed 404.
+
+### Reviewer verification
+
+From a clean clone at `1451589815793a412abe907591f88583cb252766`:
+
+```sh
+npm ci
+npm test
+npm run build
+npm run test:keyboard
+```
+
+All four commands passed. Axe returned zero violations at desktop and 390 px;
+normal live loads had no console errors. These checks do not address the review
+blockers above. Product source was not modified.
+
+### Next steps
+
+Implement the safe `/demo` flow and its storage isolation, create and exercise
+the claims registry, correct the first-screen copy, then add the missing route
+and metadata structure. Re-run the complete independent checklist afterward.
+
+---
+
+## Historical verification summary — PASS at its earlier scope
 
 Candidate `c9bd030000d2621903dc4d740d12b763c86fdfa7` and
 <https://floorplan-text-dsl.sociobot.in/> were independently verified on
