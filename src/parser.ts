@@ -29,7 +29,7 @@ export function parse(source: string): ParseResult {
 
     if ((match = text.match(/^plan\s+v(\d+)$/i))) {
       sawVersion = true;
-      if (match[1] !== '1') error(line, `DSL v${match[1]} is not supported. Use “plan v1”.`);
+      if (match[1] !== '1') error(line, `Text format version ${match[1]} is not supported. Use “plan v1”.`);
       return;
     }
     if ((match = text.match(/^title\s+"([^"]+)"$/i))) { plan.title = match[1]; return; }

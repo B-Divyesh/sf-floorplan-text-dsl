@@ -29,10 +29,10 @@
   },
   {
     "id": "true-scale",
-    "claim": "Calculates physical dimensions and reports whether the plan fits its sheet at full scale.",
+    "claim": "Exports generated SVG and PDF geometry at the selected physical scale and reports whether it fits the sheet.",
     "where": "headline, preview status, README",
     "test": "npm run test:browser -- --grep @claim:true-scale",
-    "sandbox": "fresh /demo; inspect 1:50 output and compare fitting A3 with an oversized A4 plan"
+    "sandbox": "fresh /demo; measure the 6 m wall as 120 mm in downloaded SVG and PDF coordinates, then check fitting and oversized plans"
   },
   {
     "id": "offline-editor",
@@ -43,10 +43,10 @@
   },
   {
     "id": "private-browser",
-    "claim": "Plans stay in the browser with no cookies, analytics, third-party scripts, or remote fonts.",
+    "claim": "The editor opens without an account, key, or server and keeps plans in the browser without cookies, analytics, third-party scripts, or remote fonts.",
     "where": "first-screen facts, footer, privacy page, README",
     "test": "npm run test:browser -- --grep @claim:private-browser",
-    "sandbox": "fresh /demo; intercept the full edit, guide, export, and share flow and inspect cookies"
+    "sandbox": "fresh credential-free /demo; render, intercept the full edit, guide, export, and share flow, and inspect cookies and requests"
   },
   {
     "id": "demo-isolation",
@@ -74,7 +74,14 @@
     "claim": "Supports mm, cm, m, in, ft and A4, A3, A2, Letter, Tabloid in both orientations.",
     "where": "syntax guide, README",
     "test": "npm run test:browser -- --grep @claim:units-and-paper",
-    "sandbox": "fresh /demo; render every advertised unit, paper, and orientation combination"
+    "sandbox": "fresh /demo; measure equal real lengths across all five units and render every advertised paper and orientation combination"
+  },
+  {
+    "id": "geometry-semantics",
+    "claim": "Opening positions start at a wall's first point, and signed dimension offsets stay perpendicular to their direction.",
+    "where": "syntax guide, README",
+    "test": "npm run test:browser -- --grep @claim:geometry-semantics",
+    "sandbox": "fresh /demo; download SVG and measure openings on horizontal, vertical, and reversed walls plus positive and negative dimension offsets"
   },
   {
     "id": "live-validation",
@@ -110,5 +117,19 @@
     "where": "first-screen facts, terms, README",
     "test": "npm run test:browser -- --grep @claim:free-mit",
     "sandbox": "fresh /demo; fetch the same-origin license and inspect its heading"
+  },
+  {
+    "id": "asset-provenance",
+    "claim": "The original notebook image was generated for this product with the recorded Azure OpenAI image deployment.",
+    "where": "footer, design provenance",
+    "test": "npm run test:browser -- --grep @claim:asset-provenance",
+    "sandbox": "fresh /demo; fetch the shipped image and inspect its committed prompt, model, review, date, and source asset"
+  },
+  {
+    "id": "build-output",
+    "claim": "The production build creates a complete static site in dist/.",
+    "where": "README build and deploy instructions",
+    "test": "npm run test:browser -- --grep @claim:build-output",
+    "sandbox": "clean checkout; run the browser command's production build and inspect dist index, legal pages, 404, and deployment configuration"
   }
 ]

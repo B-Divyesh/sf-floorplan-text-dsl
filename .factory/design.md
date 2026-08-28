@@ -73,11 +73,12 @@ parchment, blue-black, faded sage, carmine, old brass. Negative list: people,
 hands, photoreal rooms, UI screenshots, text, letters, numbers, logos,
 watermarks, brands, gradients, neon, glossy 3D.
 
-Asset prompt is stored beside the source image in `assets/src/`. It is generated
-specifically for this product using the factory Azure OpenAI image deployment on
-2026-08-27. Generated imagery is original to the product and disclosed in the
-footer. The bitmap is explanatory atmosphere only; all product icons and the
-actual plan renderer are hand-authored SVG/code-native assets.
+The source is `assets/src/notebook-floorplan.png`; its prompt and review record
+are `assets/src/notebook-floorplan.prompt.json`. It was generated specifically
+for this product using the factory Azure OpenAI image deployment on 2026-08-27.
+Generated imagery is original to the product and disclosed in the footer. The
+bitmap is explanatory atmosphere only; all product icons and the actual plan
+renderer are hand-authored SVG/code-native assets.
 
 The 1200 × 630 social preview was cropped from that original notebook image on
 2026-08-28. The 180 px touch icon is a hand-drawn geometric plan mark using the

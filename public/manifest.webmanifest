@@ -1,7 +1,7 @@
 {
   "name": "Floorplan Text",
   "short_name": "Floorplan",
-  "description": "Draw true-scale floor plans in a small text language.",
+  "description": "Draw scaled floor plans from text and export them.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f4efdf",

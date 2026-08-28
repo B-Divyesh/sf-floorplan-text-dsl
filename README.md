@@ -50,15 +50,13 @@ perpendicular to the start-to-end direction.
 
 ## Run locally
 
-Use Node.js 20 or newer.
-
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the printed local address. The editor needs no account, API key, or
-runtime service.
+Open the printed local address. Open the editor in your browser. You do not
+need an account, key, or server.
 
 ## Test and build
 
@@ -67,9 +65,6 @@ npm test
 npm run build
 npm run test:browser
 ```
-
-`npm test` runs the parser and export unit tests. The browser suite covers
-claims, routing, keyboard use, accessibility, privacy, and offline use.
 
 The production build is in `dist/`.
 
@@ -95,8 +90,7 @@ Read the [privacy policy](https://floorplan-text-dsl.sociobot.in/privacy).
 
 ## Deploy
 
-The factory publishes `dist/` as the static site. Repository work does not
-change DNS, billing, or infrastructure.
+Deploy the contents of `dist/` as a static site.
 
 ## License
 

@@ -36,6 +36,13 @@ let renderTimer = 0;
 let toastTimer = 0;
 let lastValid = parse(EXAMPLE).plan;
 let demoMode = false;
+let routeLinkSequence = 0;
+
+interface RouteHistoryState {
+  restoreFocusId?: string;
+  scrollX?: number;
+  scrollY?: number;
+}
 
 const ROUTES: Record<string, { title: string; description: string; kicker: string }> = {
   '/': {
@@ -154,7 +161,11 @@ function setMobilePanel(name: 'source' | 'preview'): void {
   });
 }
 
-function showRoute(focus = false): void {
+function announceRoute(): void {
+  routeAnnouncer.textContent = pageTitle.textContent + ' page';
+}
+
+function showRoute(focusHeading = false): void {
   const route = normalPath();
   const wasDemo = demoMode;
   demoMode = route === '/demo';
@@ -198,14 +209,38 @@ function showRoute(focus = false): void {
     const href = link.getAttribute('href');
     link.toggleAttribute('aria-current', href === route);
   });
-  if (focus) {
+  if (focusHeading) {
     pageTitle.focus({ preventScroll: true });
     pageTitle.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-    routeAnnouncer.textContent = pageTitle.textContent + ' page';
+    announceRoute();
   }
 }
 
-function go(path: string): void {
+function rememberRoutePosition(trigger: HTMLAnchorElement): void {
+  if (!trigger.id) {
+    routeLinkSequence += 1;
+    trigger.id = `route-return-${routeLinkSequence}`;
+  }
+  const state: RouteHistoryState = {
+    ...(history.state as RouteHistoryState | null),
+    restoreFocusId: trigger.id,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+  };
+  history.replaceState(state, '', location.href);
+}
+
+function restoreRoutePosition(state: RouteHistoryState | null): void {
+  requestAnimationFrame(() => {
+    const target = state?.restoreFocusId ? document.getElementById(state.restoreFocusId) : pageTitle;
+    (target ?? pageTitle).focus({ preventScroll: true });
+    window.scrollTo({ left: state?.scrollX ?? 0, top: state?.scrollY ?? 0, behavior: 'auto' });
+    announceRoute();
+  });
+}
+
+function go(path: string, trigger: HTMLAnchorElement): void {
+  rememberRoutePosition(trigger);
   history.pushState({}, '', path);
   showRoute(true);
 }
@@ -217,7 +252,7 @@ function bindRouteLinks(): void {
     link.addEventListener('click', event => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
-      go(link.pathname + link.search + link.hash);
+      go(link.pathname + link.search + link.hash, link);
     });
   });
 }
@@ -440,7 +475,12 @@ function updateOnline(): void {
 
 addEventListener('online', updateOnline);
 addEventListener('offline', updateOnline);
-addEventListener('popstate', () => showRoute(true));
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (!history.state) history.replaceState({}, '', location.href);
+addEventListener('popstate', event => {
+  showRoute(false);
+  restoreRoutePosition(event.state as RouteHistoryState | null);
+});
 bindRouteLinks();
 showRoute(false);
 updateOnline();
