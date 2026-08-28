@@ -97,7 +97,8 @@ test('@claim:private-browser keeps the full demo flow same-origin and cookie-fre
 test('@claim:demo-isolation never reads or writes the real plan key', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('floorplan-text-source', 'plan v1\ntitle "REAL PLAN"'));
-  await page.goto('/demo');
+  await page.goto('/?demo=1');
+  await expect(page).toHaveTitle('Demo — Floorplan Text');
   await expect(page.locator('#demo-banner')).toContainText('Demo — sample data');
   await expect(page.locator('#source')).not.toHaveValue(/REAL PLAN/);
   await page.locator('#source').fill('plan v1\ntitle "DEMO ONLY"\nwall edge from 0,0 to 100,0 thickness 10');
@@ -195,6 +196,10 @@ test('first screen names the job, audience, first action, and outcome', async ({
   await expect(page.getByRole('link', { name: 'Try it with sample data' })).toBeVisible();
   await expect(page.locator('#hero-actions')).toContainText('Garden studio plan');
   await page.screenshot({ path: '.factory/evidence/first-screen-mobile.png', fullPage: false });
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await expect(page).toHaveURL(/\/demo$/);
+  await expect(page.locator('#demo-banner')).toBeVisible();
+  await expect(page.locator('#preview svg')).toContainText('Garden studio');
 });
 
 test('routes update URL, title, focus, history, and unknown-page UI', async ({ page }) => {
@@ -213,7 +218,7 @@ test('routes update URL, title, focus, history, and unknown-page UI', async ({ p
 });
 
 test('all routes have accessible structure and no serious axe findings', async ({ page }) => {
-  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-real-page']) {
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-real-page', '/privacy/index.html', '/terms/index.html', '/404.html']) {
     await page.goto(route);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('main')).toHaveCount(1);

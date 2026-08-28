@@ -417,7 +417,7 @@ dialog::backdrop { background: rgba(23, 43, 53, .55); backdrop-filter: blur(2px)
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 10px; }
   .plain-facts { display: block; }
   .plain-facts li { border-right: 0; border-bottom: 1px solid var(--grid); }
-  .demo-banner { position: static; align-items: flex-start; flex-direction: column; gap: 4px; }
+  .demo-banner { align-items: flex-start; flex-direction: column; gap: 4px; }
   .tool-strip { align-items: stretch; flex-wrap: wrap; overflow: visible; }
   .tool-group { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .tool-group--right { grid-template-columns: 1fr 1fr; }

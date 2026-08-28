@@ -1,84 +1,133 @@
-# Floorplan Text review handoff
+# Floorplan Text polish round 1 handoff
 
-## Review 1 — FAIL
+## Outcome
 
-An adversarial first-read review was completed on 2026-08-28 without changing
-product code. The result is documented in `.factory/review-1.md` and is
-**FAIL**. The main blockers are: no visible one-click demo, `/demo` and
-`?demo=1` use and overwrite real localStorage, `.factory/claims.json` and all
-claim tests are absent, and unknown routes render the editor instead of a
-designed 404.
+Every finding in `.factory/review-1.md`, including every F-1-5 and F-1-6
+subfinding, is resolved. `.factory/polish-1.md` maps each finding to its change
+and evidence. No earlier review or polish file exists; both earlier verification
+reports were checked for regressions.
 
-### Reviewer verification
+The product remains a Vite and TypeScript static web application. Its measured
+field-notebook identity, local-first model, and SVG/PDF/PNG workflow remain
+intact.
 
-From a clean clone at `1451589815793a412abe907591f88583cb252766`:
+## What changed
+
+- The first 390 px screen now names the job, audiences, first action, sample,
+  safety boundary, browser operation, formats, and license in plain words.
+- `/demo` and `?demo=1` open the rendered Garden studio immediately. Demo mode
+  uses only `demo:floorplan-text-source`, shows a persistent banner, resets to
+  the bundled sample, and deletes demo data on exit.
+- `.factory/claims.json` declares 14 promises. Each has one uniquely tagged
+  Playwright test against a fresh demo context.
+- SVG, PDF, PNG, physical scale, fit, all units and paper choices, validation,
+  offline use, privacy, autosave, files, share links, mobile tabs, keyboard use,
+  demo isolation, and the MIT license have observable tests.
+- History routing sets route-specific titles, descriptions, canonicals, social
+  metadata, focus, announcements, and Back/Forward behavior.
+- Direct Privacy and Terms pages share the site header and footer. Unknown
+  routes return a designed notebook-style 404 with HTTP status 404.
+- Added a 1200×630 social preview derived from the original notebook art and a
+  hand-drawn 180 px touch icon. Provenance is in `.factory/design.md`.
+- Rewrote README and interface copy in plain words. The catalog line is a
+  65-character verb-first sentence. `.factory/copy-audit.md` records the audit.
+- Tightened the content security policy and retained immutable hashed assets,
+  HSTS, no-referrer, no-sniff, and restrictive permissions policy headers.
+
+## Verification evidence
+
+Clean clone: `/tmp/floorplan-polish-wAguG2`, commit `62c16b6`.
+
+```text
+npm ci                         PASS, 0 vulnerabilities
+npm test                       PASS, 6/6
+npm run build                  PASS, dist/index.html present
+14 claims.json commands        PASS individually, 14/14
+npm run test:browser           PASS, 19/19 on final worktree
+npm run test:keyboard          PASS standalone; it builds before browser launch
+```
+
+The claim suite measures, rather than only checking controls:
+
+- A3 SVG is 420 × 297 mm and contains vector drawing elements.
+- PDF has one page, a 1190.551 × 841.890 point MediaBox, and no raster image.
+- PNG is 4961 × 3508 pixels, the rounded A3 size at 300 DPI.
+- A 6 m line at 1:50 occupies 120 mm; both fit and overflow states are checked.
+- Every combination of 5 units, 5 paper names, and 2 orientations renders.
+- Offline mode reloads through the service worker, edits, exports SVG, and
+  copies a share link while the browser context has no network.
+- The full edit/guide/export/share flow has no cross-origin request, plan text
+  in requests, or cookie.
+- Seeded real data remains byte-for-byte unchanged through demo edit and reset.
+
+Azure Static Web Apps emulator checks:
+
+```text
+/                    200
+/demo                200
+/?demo=1             200
+/privacy             200
+/terms               200
+/not-a-real-page     404, Page not found — Floorplan Text
+/404                 404, Page not found — Floorplan Text
+```
+
+Accessibility and browser checks:
+
+- Axe: zero serious or critical findings on editor, demo, Privacy, Terms,
+  client 404, and standalone static pages at desktop and 390 px.
+- Normal routes: zero console or page errors.
+- Each route has `lang`, one `h1`, `main`, labelled controls, alt text, a skip
+  link, designed focus, 44 px targets, and reduced-motion handling.
+- Mobile has no horizontal overflow. Demo opens on its visible preview tab.
+- Evidence screenshots: `.factory/evidence/first-screen-mobile.png`,
+  `.factory/evidence/demo-mobile.png`, `.factory/evidence/demo-desktop.png`.
+- `/opt/fleet/lib/verify-url.sh` passed locally with title, language, one h1,
+  main landmark, alt text, and no normal-load console errors.
+
+Performance (mobile Lighthouse, production preview):
+
+```text
+Performance       100
+Accessibility     100
+Best Practices    100
+SEO               100
+LCP               1.4 s
+CLS               0
+Total blocking    0 ms
+JavaScript gzip   10.77 kB
+CSS gzip           4.23 kB
+```
+
+Raw Lighthouse JSON is `.factory/evidence/lighthouse-local.json` (ignored from
+Git because evidence binaries are not product source).
+
+## Run and verify
 
 ```sh
 npm ci
 npm test
 npm run build
+npm run test:browser
 npm run test:keyboard
 ```
 
-All four commands passed. Axe returned zero violations at desktop and 390 px;
-normal live loads had no console errors. These checks do not address the review
-blockers above. Product source was not modified.
-
-### Next steps
-
-Implement the safe `/demo` flow and its storage isolation, create and exercise
-the claims registry, correct the first-screen copy, then add the missing route
-and metadata structure. Re-run the complete independent checklist afterward.
-
----
-
-## Historical verification summary — PASS at its earlier scope
-
-Candidate `c9bd030000d2621903dc4d740d12b763c86fdfa7` and
-<https://floorplan-text-dsl.sociobot.in/> were independently verified on
-2026-08-27. The live user-served artifacts are byte-identical to the candidate
-production build. Product source was not changed during verification.
-
-## How to run and verify
-
-Requires Node.js 20+, npm, and Playwright Chromium (`npx playwright install
-chromium`) for the browser integration check.
+Run one declared claim with its exact command from `.factory/claims.json`, for
+example:
 
 ```sh
-npm ci
-npm test
-npm run build
-npm run test:keyboard
-npm run preview
+npm run test:browser -- --grep @claim:demo-isolation
 ```
 
-The above sequence passes: Vitest 6/6, strict TypeScript/Vite production build,
-and the desktop/mobile keyboard regression. `test:keyboard` must follow the
-build because it intentionally launches `vite preview`, which serves `dist/`.
+## Deployment and live verification
 
-## Verified product behavior
+Deployment target: <https://floorplan-text-dsl.sociobot.in>. The final live
+commit, deployment command, cold-browser results, screenshots, and URL/header
+checks are appended after deployment.
 
-- Validated DSL v1 plans with units, scale, paper, walls, door/window,
-  labels, and dimensions render live and report scale fit.
-- A3 1:50 export produced physical 420 x 297 mm SVG, vector PDF, and PNG.
-- Boundary opening, malformed input/line errors, last-valid-preview recovery,
-  source file import, autosave, fragment sharing, escaping, mobile tabs,
-  keyboard dialog/focus, reduced motion, and offline service-worker reload all
-  passed.
-- Axe had no violations at desktop or 390 px; console/page errors were absent.
-  Local Lighthouse scored 100 Performance, Accessibility, Best Practices, and
-  SEO (LCP 1.4 s; CLS 0.003). Initial JS is 22.39 kB and CSS 12.06 kB.
-- No third-party runtime requests, analytics, tracking, cookies, or remote
-  fonts were found. Privacy/terms are shipped. HTTPS, CSP, HSTS, nosniff,
-  no-referrer, permissions policy, immutable hashed asset caching, and
-  service-worker revalidation are live.
+## Known gaps
 
-See `.factory/verification-3.md` for commands, exact evidence, deployment
-hashes, and severity disposition.
-
-## Known product boundaries
-
-- One sheet only; oversized drawings must use a smaller scale or larger sheet.
-- Intentionally 2D and text-first: no DXF, furniture, collaboration, or 3D.
-- PDF uses built-in fonts; unsupported non-ASCII label characters are replaced
-  in PDF while SVG/PNG retain Unicode.
+No review finding or severity remains open. Product boundaries are deliberate:
+one 2D sheet, no structure or code review, and no DXF, furniture, collaboration,
+or 3D model. PDF uses built-in fonts, so unsupported non-ASCII PDF labels are
+replaced while SVG and PNG retain Unicode.
