@@ -17,7 +17,7 @@ One-click demo: <https://floorplan-text-dsl.sociobot.in/demo>
 - Walls, doors, windows, labels, and dimensions
 - Line-specific errors that keep the last valid preview visible
 - SVG with physical millimetre dimensions
-- One-page vector PDF at the selected paper size
+- One-page PDF at the chosen paper size
 - PNG with paper-size pixels at 300 DPI
 - Plain-text `.floorplan` files and self-contained share links
 - Local autosave, an offline editor, mobile tabs, and keyboard operation
@@ -71,8 +71,7 @@ npm run test:browser
 `npm test` runs the parser and export unit tests. The browser suite covers
 claims, routing, keyboard use, accessibility, privacy, and offline use.
 
-The production build is in `dist/`. It includes the Azure Static Web Apps
-route and security configuration.
+The production build is in `dist/`.
 
 Export the sample PDF for a manual scale check. Print at Actual size. At 1:50,
 the 6 m dimension measures 120 mm.
@@ -84,7 +83,7 @@ the 6 m dimension measures 120 mm.
 - Tab and Shift+Tab leave and return to the editor.
 - Ctrl/Command + ] inserts two spaces.
 - Escape closes the text syntax guide.
-- `.floorplan` files are UTF-8 plain text.
+- Floorplan files use plain text.
 
 ## Privacy
 
@@ -96,8 +95,8 @@ Read the [privacy policy](https://floorplan-text-dsl.sociobot.in/privacy).
 
 ## Deploy
 
-The factory deploys `dist/` as an Azure Static Web App. Repository work does
-not change DNS, billing, or infrastructure.
+The factory publishes `dist/` as the static site. Repository work does not
+change DNS, billing, or infrastructure.
 
 ## License
 

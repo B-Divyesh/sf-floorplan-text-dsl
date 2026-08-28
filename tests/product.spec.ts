@@ -1,5 +1,6 @@
 import { expect, test, type Download, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
 
 async function readDownload(download: Download): Promise<Buffer> {
   const stream = await download.createReadStream();
@@ -24,7 +25,7 @@ test('@claim:text-to-plan renders every version 1 drawing statement', async ({ p
   await expect(page.locator('#preview svg [data-kind="window"]')).toHaveCount(2);
   await expect(page.locator('#preview svg [data-kind="label"]')).toHaveCount(2);
   await expect(page.locator('#preview svg [data-kind="dimension"]')).toHaveCount(2);
-  await expect(page.locator('#preview svg')).toContainText('Floorplan Text DSL v1');
+  await expect(page.locator('#preview svg')).toContainText('Floorplan Text format version 1');
 });
 
 test('@claim:svg-export exports vector SVG with physical size', async ({ page }) => {
@@ -112,6 +113,17 @@ test('@claim:demo-isolation never reads or writes the real plan key', async ({ p
   expect(await page.evaluate(() => localStorage.getItem('demo:floorplan-text-source'))).toBeNull();
 });
 
+test('@claim:demo-sample opens the named sample and rendered plan', async ({ page }) => {
+  await page.goto('/?demo=1');
+  await expect(page).toHaveTitle('Demo — Floorplan Text');
+  await expect(page.locator('#demo-banner')).toBeVisible();
+  await expect(page.locator('#source')).toHaveValue(/title "Garden studio"/);
+  await expect(page.locator('#preview svg')).toContainText('Garden studio');
+  await expect(page.locator('#preview svg [data-kind="wall"]')).toHaveCount(4);
+  await expect(page.locator('#object-count')).toContainText('11 objects');
+  await page.screenshot({ path: '.factory/evidence/polish-2-demo-desktop.png', fullPage: false });
+});
+
 test('@claim:local-autosave restores edits inside the selected workspace', async ({ page }) => {
   await page.goto('/demo');
   await page.locator('#source').fill('plan v1\ntitle "Saved demo"\nwall edge from 0,0 to 100,0 thickness 10');
@@ -181,6 +193,30 @@ test('@claim:mobile-keyboard provides mobile tabs and complete keyboard escape',
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test('@claim:keyboard-shortcuts renders, saves, indents, and closes the guide', async ({ page }) => {
+  await page.goto('/demo');
+  const plan = 'plan v1\ntitle "Shortcut plan"\nwall edge from 0,0 to 100,0 thickness 10';
+  await page.locator('#source').fill(plan);
+  await page.locator('#source').press('Control+Enter');
+  await expect(page.locator('#toast')).toContainText('Preview rendered');
+  await expect(page.locator('#preview svg')).toContainText('Shortcut plan');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.locator('#source').press('Control+s');
+  const saved = await readDownload(await downloadPromise);
+  expect(saved.toString()).toBe(plan);
+
+  await page.locator('#source').fill('wall');
+  await page.locator('#source').evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(2, 2));
+  await page.locator('#source').press('Control+]');
+  await expect(page.locator('#source')).toHaveValue('wa  ll');
+
+  await page.locator('#syntax-button').click();
+  await expect(page.locator('#syntax-dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#syntax-dialog')).toBeHidden();
+});
+
 test('@claim:free-mit serves the stated license from the demo', async ({ page }) => {
   await page.goto('/demo');
   const response = await page.request.get('/LICENSE.txt');
@@ -194,12 +230,33 @@ test('first screen names the job, audience, first action, and outcome', async ({
   await expect(page.locator('h1')).toHaveText('Draw a scaled floor plan from text');
   await expect(page.locator('#page-summary')).toContainText('renters, DIYers, landlords, and engineers');
   await expect(page.getByRole('link', { name: 'Try it with sample data' })).toBeVisible();
-  await expect(page.locator('#hero-actions')).toContainText('Garden studio plan');
-  await page.screenshot({ path: '.factory/evidence/first-screen-mobile.png', fullPage: false });
+  await expect(page.locator('#hero-actions')).toContainText('Opens the Garden studio sample');
+  await expect(page.locator('.brand')).toContainText(/Floorplan\s*Text/);
+  await expect(page.locator('.brand span')).toBeVisible();
+  await page.screenshot({ path: '.factory/evidence/polish-2-first-screen-mobile.png', fullPage: false });
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
   await expect(page).toHaveURL(/\/demo$/);
   await expect(page.locator('#demo-banner')).toBeVisible();
   await expect(page.locator('#preview svg')).toContainText('Garden studio');
+  await page.screenshot({ path: '.factory/evidence/polish-2-demo-mobile.png', fullPage: false });
+});
+
+test('landing explains the workflow, limits, and browser storage', async ({ page }) => {
+  await page.goto('/');
+  const guide = page.locator('#landing-guide');
+  await expect(guide.getByRole('heading', { name: 'Make a scaled plan in three steps' })).toBeVisible();
+  await expect(guide.locator('.workflow-guide li')).toHaveCount(3);
+  await expect(guide).toContainText('Type walls and measurements');
+  await expect(guide).toContainText('Check the scaled preview');
+  await expect(guide).toContainText('Export SVG, PDF, or PNG');
+  await expect(guide.getByRole('heading', { name: 'What Floorplan Text does not check' })).toBeVisible();
+  await expect(guide).toContainText('It does not check building codes, structure, or site measurements.');
+  await expect(guide).toContainText('Valid plan text stays in this browser.');
+  await guide.screenshot({ path: '.factory/evidence/polish-2-landing-sections.png' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(guide.getByRole('heading', { name: 'What Floorplan Text does not check' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: '.factory/evidence/polish-2-root-mobile-full.png', fullPage: true });
 });
 
 test('routes update URL, title, focus, history, and unknown-page UI', async ({ page }) => {
@@ -211,10 +268,53 @@ test('routes update URL, title, focus, history, and unknown-page UI', async ({ p
   await expect(page.locator('h1')).toBeFocused();
   await page.goBack();
   await expect(page).toHaveTitle('Floorplan Text — Draw scaled plans from text');
+  await expect(page.locator('h1')).toBeFocused();
   await page.goto('/not-a-real-page');
   await expect(page).toHaveTitle('Page not found — Floorplan Text');
   await expect(page.locator('h1')).toHaveText('This page is not in the plan');
   await expect(page.getByRole('link', { name: 'Open the editor' })).toBeVisible();
+});
+
+test('routes expose complete metadata, legal links, and the static 404 contract', async ({ page }) => {
+  const routes = [
+    ['/', 'Floorplan Text — Draw scaled plans from text', 'https://floorplan-text-dsl.sociobot.in/'],
+    ['/demo', 'Demo — Floorplan Text', 'https://floorplan-text-dsl.sociobot.in/demo'],
+    ['/privacy', 'Privacy — Floorplan Text', 'https://floorplan-text-dsl.sociobot.in/privacy'],
+    ['/terms', 'Terms — Floorplan Text', 'https://floorplan-text-dsl.sociobot.in/terms'],
+    ['/not-a-real-page', 'Page not found — Floorplan Text', 'https://floorplan-text-dsl.sociobot.in/404'],
+  ] as const;
+
+  for (const [route, title, canonical] of routes) {
+    await page.goto(route);
+    await expect(page).toHaveTitle(title);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /^.{1,155}$/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/assets\/social-preview\.jpg$/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+    await expect(page.locator('footer a[href="/privacy"]')).toBeVisible();
+    await expect(page.locator('footer a[href="/terms"]')).toBeVisible();
+  }
+
+  await page.goto('/?demo=1');
+  await expect(page).toHaveTitle('Demo — Floorplan Text');
+  await expect(page.locator('#demo-banner')).toBeVisible();
+
+  const configResponse = await page.request.get('/staticwebapp.config.json');
+  expect(configResponse.ok()).toBe(true);
+  const config = await configResponse.json();
+  expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html', statusCode: 404 });
+});
+
+test('each registered claim has exactly one tagged browser test', async () => {
+  const claims = JSON.parse(readFileSync('.factory/claims.json', 'utf8')) as Array<{ id: string; test: string }>;
+  const suite = readFileSync('tests/product.spec.ts', 'utf8');
+  expect(claims).toHaveLength(16);
+  expect(new Set(claims.map(item => item.id)).size).toBe(claims.length);
+  for (const claim of claims) {
+    const tag = `@claim:${claim.id}`;
+    expect(claim.test).toContain(`--grep ${tag}`);
+    expect(suite.split(tag)).toHaveLength(2);
+  }
 });
 
 test('all routes have accessible structure and no serious axe findings', async ({ page }) => {

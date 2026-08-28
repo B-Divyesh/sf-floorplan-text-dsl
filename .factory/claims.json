@@ -56,6 +56,13 @@
     "sandbox": "seed the real key, exercise /demo reset and exit, and inspect real and demo storage keys"
   },
   {
+    "id": "demo-sample",
+    "claim": "The sample action opens the named Garden studio source and its rendered plan.",
+    "where": "first-screen sample action, demo guide",
+    "test": "npm run test:browser -- --grep @claim:demo-sample",
+    "sandbox": "fresh browser context at /?demo=1; inspect the named source, rendered title, four walls, and object count"
+  },
+  {
     "id": "local-autosave",
     "claim": "Valid plan text is saved in the selected browser workspace and restored after reload.",
     "where": "save state, privacy page, README",
@@ -89,6 +96,13 @@
     "where": "mobile workspace, README",
     "test": "npm run test:browser -- --grep @claim:mobile-keyboard",
     "sandbox": "fresh 390px /demo; switch tabs, traverse textarea controls, and close the dialog with Escape"
+  },
+  {
+    "id": "keyboard-shortcuts",
+    "claim": "Ctrl or Command with Enter renders, S saves, ] inserts two spaces, and Escape closes the text guide.",
+    "where": "editor shortcut hint, README",
+    "test": "npm run test:browser -- --grep @claim:keyboard-shortcuts",
+    "sandbox": "fresh /demo; perform every documented shortcut and inspect the preview, saved file, text indentation, and dialog state"
   },
   {
     "id": "free-mit",

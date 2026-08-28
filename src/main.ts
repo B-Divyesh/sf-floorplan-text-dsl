@@ -24,6 +24,7 @@ const offlineBanner = document.querySelector<HTMLElement>('#offline-banner')!;
 const editorRoute = document.querySelector<HTMLElement>('#editor-route')!;
 const contentRoute = document.querySelector<HTMLElement>('#content-route')!;
 const demoBanner = document.querySelector<HTMLElement>('#demo-banner')!;
+const landingGuide = document.querySelector<HTMLElement>('#landing-guide')!;
 const pageTitle = document.querySelector<HTMLHeadingElement>('#page-title')!;
 const pageKicker = document.querySelector<HTMLElement>('#page-kicker')!;
 const pageSummary = document.querySelector<HTMLElement>('#page-summary')!;
@@ -165,6 +166,7 @@ function showRoute(focus = false): void {
   demoBanner.hidden = !demoMode;
   heroActions.hidden = route !== '/';
   plainFacts.hidden = route !== '/';
+  landingGuide.hidden = route !== '/';
 
   if (route === '/') {
     pageTitle.textContent = 'Draw a scaled floor plan from text';

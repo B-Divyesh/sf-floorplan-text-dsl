@@ -41,7 +41,7 @@
         <p class="route-summary" id="page-summary">For renters, DIYers, landlords, and engineers who need a printable measured plan without CAD.</p>
         <div class="hero-actions" id="hero-actions">
           <a class="primary-action" href="/demo" data-route>Try it with sample data</a>
-          <span>Opens a furnished Garden studio plan. Nothing is saved to your plans.</span>
+          <span>Opens the Garden studio sample. Demo changes stay separate from your plans.</span>
         </div>
         <ul class="plain-facts" id="plain-facts">
           <li>Runs in this browser</li>
@@ -70,7 +70,7 @@
               <summary><span aria-hidden="true">↧</span> Export plan <span aria-hidden="true">⌄</span></summary>
               <div class="export-popover">
                 <button type="button" data-export="svg"><strong>Export scaled SVG</strong><small>Vector drawing with physical millimetres</small></button>
-                <button type="button" data-export="pdf"><strong>Export scaled PDF</strong><small>Vector page for printing at 100%</small></button>
+                <button type="button" data-export="pdf"><strong>Export scaled PDF</strong><small>One-page PDF for printing at 100%</small></button>
                 <button type="button" data-export="png"><strong>Export PNG image</strong><small>Paper-size pixels at 300 DPI</small></button>
               </div>
             </details>
@@ -97,13 +97,37 @@
         <aside id="offline-banner" class="offline-banner" hidden><strong>You are offline.</strong> The editor and exports still work. Copy a share link to send later.</aside>
       </section>
 
+      <section id="landing-guide" class="landing-guide" aria-label="How Floorplan Text works and its limits">
+        <div class="workflow-guide">
+          <p class="eyebrow">From notes to drawing</p>
+          <h2>Make a scaled plan in three steps</h2>
+          <ol>
+            <li><span aria-hidden="true">01</span><div><h3>Type walls and measurements</h3><p>Enter each wall, opening, label, and dimension as one line.</p></div></li>
+            <li><span aria-hidden="true">02</span><div><h3>Check the scaled preview</h3><p>Compare the drawing with your measurements before you export it.</p></div></li>
+            <li><span aria-hidden="true">03</span><div><h3>Export SVG, PDF, or PNG</h3><p>Choose the file that suits printing or sharing.</p></div></li>
+          </ol>
+        </div>
+        <div class="boundary-note">
+          <div>
+            <p class="eyebrow">Drawing boundary</p>
+            <h2>What Floorplan Text does not check</h2>
+            <p>It does not check building codes, structure, or site measurements.</p>
+          </div>
+          <div>
+            <h3>Where your plan is stored</h3>
+            <p>Valid plan text stays in this browser. Demo changes use separate storage and are removed when you leave.</p>
+            <a href="/privacy" data-route>Read the privacy details</a>
+          </div>
+        </div>
+      </section>
+
       <article id="content-route" class="content-page" hidden></article>
     </main>
 
     <footer class="site-footer">
       <p>Draw scaled floor plans from text. Check every dimension before construction.</p>
       <nav aria-label="Footer navigation"><a href="/privacy" data-route>Privacy</a><a href="/terms" data-route>Terms</a><a href="https://github.com/B-Divyesh/sf-floorplan-text-dsl">Source <span class="visually-hidden">(external)</span></a></nav>
-      <p>Built by Param Factory · Build <span id="build-id">polish-1</span></p>
+      <p>Built by Param Factory · Build <span id="build-id">polish-2</span></p>
       <p class="asset-note">Original notebook image generated for this product with Azure OpenAI.</p>
     </footer>
 

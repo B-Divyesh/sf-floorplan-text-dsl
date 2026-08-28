@@ -156,7 +156,7 @@ export function renderSvg(plan: Plan): { svg: string; layout: Layout } {
   <rect width="100%" height="100%" fill="${PAPER}"/><rect x="7" y="7" width="${layout.width - 14}" height="${layout.height - 14}" fill="url(#minor-grid)" opacity="0.62"/>
   ${empty}${body.join('\n  ')}
   <g aria-label="Drawing information"><path d="M ${layout.width - 88} ${layout.height - 24} h81 v17 h-81 z M ${layout.width - 88} ${layout.height - 17} h81" fill="${PAPER}" stroke="${INK}" stroke-width="0.35"/><text x="${layout.width - 85}" y="${layout.height - 18.9}" fill="${INK}" font-size="3.2" font-family="Georgia, serif">${esc(plan.title)}</text><text x="${layout.width - 85}" y="${layout.height - 11}" fill="${MUTED}" font-size="2.7" font-family="ui-monospace, monospace">SCALE 1:${plan.scale} · ${esc(plan.paper.toUpperCase())} · ${esc(plan.units.toUpperCase())}</text></g>
-  <text x="7" y="${layout.height - 3}" fill="${MUTED}" font-size="2.3" font-family="ui-monospace, monospace">Floorplan Text DSL v1 · Verify dimensions before construction.</text>
+  <text x="7" y="${layout.height - 3}" fill="${MUTED}" font-size="2.3" font-family="ui-monospace, monospace">Floorplan Text format version 1 · Check dimensions before construction.</text>
 </svg>`;
   return { svg, layout };
 }

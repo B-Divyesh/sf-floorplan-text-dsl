@@ -7,6 +7,8 @@ mode. One click on “Try it with sample data” opens the demo from the editor.
 
 The sample is a 6.0 × 4.2 m Garden studio. It includes four walls, one door,
 two windows, two labels, and two dimensions on an A3 landscape sheet at 1:50.
+The `@claim:demo-sample` browser test checks the named source and rendered plan
+from a clean `/?demo=1` visit.
 
 Demo edits use `localStorage['demo:floorplan-text-source']`. Demo code never
 reads or writes `localStorage['floorplan-text-source']`, which belongs to the

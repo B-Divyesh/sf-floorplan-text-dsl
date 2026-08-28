@@ -51,6 +51,9 @@ for sheets. The workbench uses all available room; supporting prose is narrow.
   labelled menu; examples and syntax use native dialogs with deliberate focus.
 - On phones, editor and preview become two large notebook tabs. Nothing is
   miniaturised; export remains reachable in the sticky tool strip.
+- The landing workflow uses ruled ledger rows. A double ink rule separates the
+  safety and browser-storage boundary, so explanation still feels like part of
+  the measured notebook.
 
 ## Motion policy
 
