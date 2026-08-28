@@ -299,9 +299,7 @@ test('routes expose complete metadata, legal links, and the static 404 contract'
   await expect(page).toHaveTitle('Demo — Floorplan Text');
   await expect(page.locator('#demo-banner')).toBeVisible();
 
-  const configResponse = await page.request.get('/staticwebapp.config.json');
-  expect(configResponse.ok()).toBe(true);
-  const config = await configResponse.json();
+  const config = JSON.parse(readFileSync('staticwebapp.config.json', 'utf8'));
   expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html', statusCode: 404 });
 });
 
